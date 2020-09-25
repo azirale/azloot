@@ -6,4 +6,8 @@
     <RootNamespace>azloot.devcheck</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\core\core.csproj" />
+  </ItemGroup>
+
 </Project>
