@@ -9,7 +9,7 @@ namespace azloot.core
     /// </summary>
     public class LootEngine
     {
-        private Dataconfig config { get; set; }
+        private Configuration config { get; set; }
 
         public List<Bid> GetSortedBids(List<Bid> existingBids)
         {
@@ -49,8 +49,8 @@ namespace azloot.core
                 PointsList = pointsList,
                 Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
             };
-            this.config.LootHistory.AddEvent(newLootEvent);
-            var currentPoints = pointsList.GetPointsOfPerson(person);
+            this.config.LootHistory.Add(newLootEvent);
+            var currentPoints = pointsList[person];
             var newPointsEvent = new PointsEvent()
             {
                 Id = new Guid(),
@@ -58,17 +58,17 @@ namespace azloot.core
                 Recipients = new List<Person>() { person },
                 Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
                 Value = -currentPoints,
-                Reason = String.Format("Won item {0} ({1}) on list {2}", item.ItemId, item.Name, pointsList.Name)
+                Reason = String.Format("Won item {0} ({1}) on list {2}", item.Id, item.Name, pointsList.Name)
             };
-            this.config.PointsHistory.AddEvent(newPointsEvent);
-            pointsList.SetPointsOfPerson(person, 0);
+            this.config.PointsHistory.Add(newPointsEvent);
+            pointsList[person] = 0;
         }
 
         public void AddPoints(PointsList pointsList, List<Person> persons, float addValue, string reason)
         {
             foreach (Person person in persons)
             {
-                pointsList.AddPointsToPerson(person, addValue);
+                pointsList[person] += addValue;
             }
             var newPointsEvent = new PointsEvent()
             {
@@ -79,7 +79,7 @@ namespace azloot.core
                 Value = addValue,
                 Reason = reason
             };
-            this.config.PointsHistory.AddEvent(newPointsEvent);
+            this.config.PointsHistory.Add(newPointsEvent);
         }
 
         /// <summary>
@@ -97,8 +97,8 @@ namespace azloot.core
             var personrankTierOrder = one.Person.Rank.Tier.CompareTo(two.Person.Rank.Tier);
             if (personrankTierOrder != 0) return personrankTierOrder;
             // if above is all equal then we go by points of the persons
-            var thisPersonPoints = one.PrioList.GetPointsOfPerson(one.Person);
-            var otherPersonPoints = two.PrioList.GetPointsOfPerson(two.Person);
+            var thisPersonPoints = one.PrioList[one.Person];
+            var otherPersonPoints = two.PrioList[two.Person];
             var personPointsOrder = thisPersonPoints.CompareTo(otherPersonPoints);
             if (personPointsOrder != 0) return personPointsOrder;
             // if points are equal as well then whoever has gone longest without loot
@@ -113,7 +113,7 @@ namespace azloot.core
             var personCoinflip = one.Person.Id.CompareTo(two.Person.Id);
             if (personCoinflip != 0) return personCoinflip;
             // if the same player has submitted multiple builds on equal lists at equal prio coinflip the items
-            return one.Item.ItemId.CompareTo(two.Item.ItemId);
+            return one.Item.Id.CompareTo(two.Item.Id);
         }
 
         public void CreatePointslist(string Name)

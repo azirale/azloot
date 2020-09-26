@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text.Json;
+using azloot.core;
 
 namespace azloot.devcheck
 {
@@ -6,9 +9,14 @@ namespace azloot.devcheck
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Trying demo data serialisation");
-            var printme = JsonStuff.GetDemoSerialisedJsonText();
-            Console.Write(printme);
+
+
+
+
+            //Console.WriteLine("Trying demo data serialisation");
+            //var printme = JsonStuff.GetDemoSerialisedJsonText();
+            //Console.Write(printme);
+            //JsonStuff.CheckDemoDataconfigRoundTripSerialisation();
             Console.ReadLine();
         }
     }

@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// When distributing out loot this tracks an individual bid.
+    /// This data is transient -- no need to serialise.
     /// </summary>
     public class Bid
     {

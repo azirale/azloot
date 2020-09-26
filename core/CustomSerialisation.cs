@@ -8,35 +8,39 @@ namespace azloot.core
     public static class CustomSerialisation
     {
         //TODO put me in the dataconfig class as ToJson()
-        public static string Serialise(Dataconfig config)
+        public static string Serialise(Configuration config)
         {
-            // set options and register the converters -- relies on converters specified in the options
-            var options = CreateOptions();
-            // you'll probably have enough memory
-            var memstream = new MemoryStream();
-            var jsonwriter = new Utf8JsonWriter(memstream, options);
-            WriteConfig(ref jsonwriter, config);
-            jsonwriter.Dispose();
-            
-
-            memstream.Position = 0;
-            var sr = new StreamReader(memstream);
-            var result = sr.ReadToEnd();
-            return result;
+            var jsonText = JsonSerializer.Serialize(config.ToDatapack());
+            return jsonText;
         }
 
-        private static JsonWriterOptions CreateOptions()
+        public static Configuration Deserialise(string jsonText)
+        {
+            ConfigurationDatapack pack = JsonSerializer.Deserialize<ConfigurationDatapack>(jsonText);
+
+            throw new NotImplementedException();
+        }
+
+        private static void ReadConfig(ref Utf8JsonReader reader, Configuration config)
+        {
+
+            throw new NotImplementedException();
+        }
+
+        private static JsonWriterOptions CreateDefaultWriterOptions()
         {
             var options = new JsonWriterOptions();
+            // default to a pretty-print style
             options.Indented = true;
             return options;
         }
 
         #region serialisation methods
-        private static void WriteConfig(ref Utf8JsonWriter writer, Dataconfig value)
+        /*
+        private static void WriteConfig(ref Utf8JsonWriter writer, Configuration value)
         {
             writer.WriteStartObject();
-            WriteKnownItems(ref writer, Item.GetKnownItems());
+            WriteKnownItems(ref writer, Item.GetCachedItems());
             WriteRanks(ref writer, value.Ranks.Values);
             WritePersons(ref writer, value.Persons.Values);
             WritePointsLists(ref writer, value.PointsLists.Values);
@@ -135,7 +139,7 @@ namespace azloot.core
         private static void WriteKnownItem(Utf8JsonWriter writer, Item value)
         {
             writer.WriteStartObject();
-            writer.WriteNumber("id", value.ItemId);
+            writer.WriteNumber("id", value.Id);
             writer.WriteString("name", value.Name);
             writer.WriteEndObject();
         }
@@ -154,12 +158,18 @@ namespace azloot.core
         {
             writer.WriteStartObject();
             writer.WriteString("id", value.Id);
-            writer.WriteNumber("itemid", value.Item.ItemId);
+            writer.WriteNumber("itemid", value.Item.Id);
             writer.WriteString("personid", value.Person.Id);
             writer.WriteString("priolistid", value.PointsList.Id);
             writer.WriteNumber("timestamp", value.Timestamp);
             writer.WriteEndObject();
         }
+        */
+        #endregion
+        
+
+        #region deserialisation methods
+        // do stuff
         #endregion
     }
 }

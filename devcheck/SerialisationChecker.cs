@@ -1,36 +1,50 @@
-﻿using System;
+﻿using azloot.core;
+using System;
 using System.Collections.Generic;
-using azloot.core;
+using System.Text.Json;
 
 namespace azloot.devcheck
 {
-    static class JsonStuff
+    static class SerialisationChecker
     {
-        private static Dataconfig CreateDemoDataConfig()
+        public static bool DatapackRoundTripCheck()
         {
-            Dataconfig config = new Dataconfig();
+            var jsonOptions = new JsonSerializerOptions() { WriteIndented = true };
+            var initialConfig = CreateDemoDataConfig();
+            var initialDatapack = initialConfig.ToDatapack();
+            var initialJson = JsonSerializer.Serialize(initialDatapack, jsonOptions);
+            Console.WriteLine(initialJson);
+            var returnConfig = JsonSerializer.Deserialize<ConfigurationDatapack>(initialJson, jsonOptions);
+            var returnJson = JsonSerializer.Serialize(returnConfig, jsonOptions);
+            var isSame = initialJson == returnJson;
+            return isSame;
+        }
+
+        public static Configuration CreateDemoDataConfig()
+        {
+            Configuration config = new Configuration();
             // items have no dependencies
-            var item1 = Item.CreateKnownItem(19351, "Maladath, Runed Blade of the Black Flight");
-            var item2 = Item.CreateKnownItem(21520, "Ravencrest's Legacy");
+            var item1 = new Item(19351, "Maladath, Runed Blade of the Black Flight");
+            var item2 = new Item(21520, "Ravencrest's Legacy");
             // ranks have no dependencies
             var rank1 = new Rank() { Id = Guid.NewGuid(), Name = "TestRank1", Tier = 1 };
             var rank2 = new Rank() { Id = Guid.NewGuid(), Name = "TestRank2", Tier = 2 };
-            config.Ranks.Add(rank1.Id, rank1);
-            config.Ranks.Add(rank2.Id, rank2);
+            config.Ranks[rank1] = rank1;
+            config.Ranks[rank2] = rank2;
             // persons only depend on ranks
             var person1 = new Person() { Id = Guid.NewGuid(), Name = "DangerousDave", Rank = rank1 };
             var person2 = new Person() { Id = Guid.NewGuid(), Name = "SalaciousSally", Rank = rank2 };
-            config.Persons.Add(person1.Id, person1);
-            config.Persons.Add(person2.Id, person2);
+            config.Persons.Add(person1);
+            config.Persons.Add(person2);
             // pointslists contain persons
             var pointslist1 = new PointsList() { Id = Guid.NewGuid(), Name = "Primary", Tier = 1 };
-            pointslist1.Points.Add(person1.Id, 17.4f);
-            pointslist1.Points.Add(person2.Id, 21.3f);
+            pointslist1.Add(person1, 17.4f);
+            pointslist1.Add(person2, 21.3f);
             var pointslist2 = new PointsList() { Id = Guid.NewGuid(), Name = "Secondary", Tier = 2 };
-            pointslist2.Points.Add(person1.Id, 21.3f);
-            pointslist2.Points.Add(person2.Id, 33.4f);
-            config.PointsLists.Add(pointslist1.Id, pointslist1);
-            config.PointsLists.Add(pointslist2.Id, pointslist2);
+            pointslist2.Add(person1, 21.3f);
+            pointslist2.Add(person2, 33.4f);
+            config.PointsLists.Add(pointslist1);
+            config.PointsLists.Add(pointslist2);
             // points events to go into history
             var pointsevent1 = new PointsEvent()
             {
@@ -50,8 +64,8 @@ namespace azloot.devcheck
                 Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
                 Recipients = new List<Person>(new Person[] { person1, person2 })
             };
-            config.PointsHistory.AddEvent(pointsevent1);
-            config.PointsHistory.AddEvent(pointsevent2);
+            config.PointsHistory.Add(pointsevent1);
+            config.PointsHistory.Add(pointsevent2);
             // loot events go into history
             var loot1 = new LootEvent()
             {
@@ -69,17 +83,10 @@ namespace azloot.devcheck
                 Item = item2,
                 Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
             };
-            config.LootHistory.AddEvent(loot1);
-            config.LootHistory.AddEvent(loot2);
+            config.LootHistory.Add(loot1);
+            config.LootHistory.Add(loot2);
             // done -- we can give it back
             return config;
-        }
-        public static string GetDemoSerialisedJsonText()
-        {
-            var config = CreateDemoDataConfig();
-            // data is prepped -- now serialise it
-            var jsonText = CustomSerialisation.Serialise(config);
-            return jsonText;
         }
     }
 }

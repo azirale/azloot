@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Xml;
 
 namespace azloot.core
@@ -9,42 +8,61 @@ namespace azloot.core
     /// </summary>
     public class Item
     {
-        private readonly static Dictionary<int, Item> knownItems = new Dictionary<int, Item>();
-        public int ItemId { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
 
-        public static Item FromId(int itemId)
+        public Item() { this.Id = 0; }
+
+        public Item(int id, string Name)
         {
-            if (knownItems.ContainsKey(itemId)) return knownItems[itemId];
-            var newItem = new Item() { ItemId = itemId, Name = "UNKNOWN" };
-            var uri = String.Format("https://www.wowhead.com/item={0}&xml", itemId);
-            var xmlreader = XmlTextReader.Create(uri);
-            while (xmlreader.Read())
+            this.Id = id;
+            this.Name = Name;
+        }
+
+        public Item(ItemDatapack datapack)
+        {
+            this.Id = datapack.id;
+            this.Name = datapack.name;
+        }
+
+        public ItemDatapack ToDatapack()
+        {
+            return new ItemDatapack()
             {
-                if (xmlreader.NodeType == XmlNodeType.Element && xmlreader.Name == "Name")
+                id = this.Id,
+                name = this.Name
+            };
+        }
+
+        public void FetchNameFromWowhead()
+        {
+            var uri = String.Format("https://www.wowhead.com/item={0}&xml", this.Id);
+            using (var xmlreader = XmlTextReader.Create(uri))
+            {
+                while (xmlreader.Read())
                 {
-                    newItem.Name = xmlreader.Value;
-                    break;
+                    if (xmlreader.NodeType == XmlNodeType.Element && xmlreader.Name == "Name")
+                    {
+                        this.Name = xmlreader.Value;
+                        break;
+                    }
                 }
             }
-            knownItems[itemId] = newItem;
-            return newItem;
         }
 
-        public static Item CreateKnownItem(int id, string name)
+        public override int GetHashCode()
         {
-            if (knownItems.ContainsKey(id)) return knownItems[id];
-            var newItem = new Item() { ItemId = id, Name = name };
-            knownItems[id] = newItem;
-            return newItem;
+            return this.Id.GetHashCode();
         }
 
-        public static IEnumerable<Item> GetKnownItems()
-        {
-            foreach (var item in knownItems.Values)
-            {
-                yield return item;
-            }
-        }
+    }
+
+    /// <summary>
+    /// Dereferenced data packing object for Item
+    /// </summary>
+    public class ItemDatapack
+    {
+        public int id { get; set; }
+        public string name { get; set; }
     }
 }
