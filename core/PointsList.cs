@@ -44,11 +44,6 @@ namespace azloot.core
             };
         }
 
-        public override int GetHashCode()
-        {
-            return this.Id.GetHashCode();
-        }
-
         #region IDictionary Implementation
         private readonly Dictionary<Person, float> Points = new Dictionary<Person, float>();
         public ICollection<Person> Keys => ((IDictionary<Person, float>)Points).Keys;

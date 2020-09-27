@@ -11,11 +11,6 @@ namespace azloot.core
         public string Name { get; set; }
         public Rank Rank { get; set; }
 
-        public override int GetHashCode()
-        {
-            return this.Id.GetHashCode();
-        }
-
         public PersonDatapack ToDatapack()
         {
             return new PersonDatapack() { id = this.Id, name = this.Name, rankid = this.Rank.Id };

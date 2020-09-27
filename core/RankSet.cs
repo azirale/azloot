@@ -3,11 +3,8 @@ using System.Collections.Generic;
 
 namespace azloot.core
 {
-    public class RankSet : Dictionary<Rank,Rank>
+    public class RankSet : Dictionary<Guid,Rank>
     {
-        private static readonly Rank searchRank = new Rank();
-        public Rank this[Guid rankId] { get { searchRank.Id = rankId; return this[searchRank]; } }
-
         public RankSetDatapack ToDatapack()
         {
             var ranksList = new List<RankDatapack>();
@@ -22,13 +19,13 @@ namespace azloot.core
             foreach (var rankData in datapack.entries)
             {
                 var newRank = new Rank(rankData);
-                this[newRank] = newRank;
+                this[newRank.Id] = newRank;
             }
         }
 
         public void Add(Rank rank)
         {
-            this[rank] = rank;
+            this[rank.Id] = rank;
         }
     }
 

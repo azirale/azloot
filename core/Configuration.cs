@@ -20,6 +20,7 @@ namespace azloot.core
         {
             return new ConfigurationDatapack()
             {
+                items = this.Items.ToDatapack(),
                 pointslists = this.PointsLists.ToDatapack(),
                 persons = this.Persons.ToDatapack(),
                 ranks = this.Ranks.ToDatapack(),

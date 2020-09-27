@@ -9,7 +9,12 @@ namespace azloot.devcheck
     {
         static void Main(string[] args)
         {
-
+            Console.WriteLine("Checking round trip serialisation of datapack...");
+            var result1 = SerialisationChecker.DatapackRoundTripCheck();
+            Console.WriteLine("Success state: {0}", result1);
+            Console.WriteLine("Checking serialisation roundtrip...");
+            var result2 = SerialisationChecker.ConfigRoundTripCheck();
+            Console.WriteLine("Success State: {0}", result2);
 
 
 

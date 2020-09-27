@@ -49,12 +49,6 @@ namespace azloot.core
                 }
             }
         }
-
-        public override int GetHashCode()
-        {
-            return this.Id.GetHashCode();
-        }
-
     }
 
     /// <summary>

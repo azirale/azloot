@@ -23,6 +23,7 @@ namespace azloot.core
             this.PointsList = config.PointsLists[datapack.pointslistid];
             this.Timestamp = datapack.timestamp;
             this.Reason = datapack.reason;
+            this.Recipients = new List<Person>(datapack.recipientids.Count);
             foreach (var personId in datapack.recipientids) this.Recipients.Add(config.Persons[personId]);
         }
 
@@ -39,11 +40,6 @@ namespace azloot.core
                 value = this.Value,
                 reason = this.Reason
             };
-        }
-
-        public override int GetHashCode()
-        {
-            return this.Id.GetHashCode();
         }
     }
 

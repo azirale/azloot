@@ -29,11 +29,6 @@ namespace azloot.core
                 tier = this.Tier
             };
         }
-
-        public override int GetHashCode()
-        {
-            return Id.GetHashCode();
-        }
     }
 
     /// <summary>

@@ -1,24 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Text.Json;
 
 namespace azloot.core
 {
     public static class CustomSerialisation
     {
-        //TODO put me in the dataconfig class as ToJson()
         public static string Serialise(Configuration config)
         {
-            var jsonText = JsonSerializer.Serialize(config.ToDatapack());
+            var options = new JsonSerializerOptions() { WriteIndented = true };
+            var jsonText = JsonSerializer.Serialize(config.ToDatapack(), options);
             return jsonText;
         }
 
         public static Configuration Deserialise(string jsonText)
         {
             ConfigurationDatapack pack = JsonSerializer.Deserialize<ConfigurationDatapack>(jsonText);
-
-            throw new NotImplementedException();
+            Configuration config = new Configuration(pack);
+            return config;
         }
 
         private static void ReadConfig(ref Utf8JsonReader reader, Configuration config)
