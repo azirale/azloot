@@ -13,6 +13,13 @@ namespace azloot.core
 
         public Rank() { }
 
+        public Rank(string name, int tier)
+        {
+            this.Id = Guid.NewGuid();
+            this.Name = name;
+            this.Tier = tier;
+        }
+
         public Rank(RankDatapack datapack)
         {
             this.Id = datapack.id;

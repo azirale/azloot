@@ -19,6 +19,13 @@ namespace azloot.core
 
         public PointsList() { }
 
+        public PointsList(string name, int tier)
+        {
+            this.Id = Guid.NewGuid();
+            this.Name = name;
+            this.Tier = tier;
+        }
+
         public PointsList(PointsListDatapack datapack, Configuration config)
         {
             this.Id = datapack.id;
