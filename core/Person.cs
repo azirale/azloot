@@ -9,11 +9,20 @@ namespace azloot.core
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public string ClassName { get; set; }
+        public string RoleName { get; set; }
         public Rank Rank { get; set; }
 
         public PersonDatapack ToDatapack()
         {
-            return new PersonDatapack() { id = this.Id, name = this.Name, rankid = this.Rank.Id };
+            return new PersonDatapack()
+            {
+                id = this.Id,
+                name = this.Name,
+                classname = this.ClassName,
+                rolename = this.RoleName,
+                rankid = this.Rank.Id
+            };
         }
 
         public Person() { }
@@ -22,6 +31,8 @@ namespace azloot.core
         {
             this.Id = datapack.id;
             this.Name = datapack.name;
+            this.ClassName = datapack.name;
+            this.RoleName = datapack.rolename;
             this.Rank = config.Ranks[datapack.rankid];
         }
     }
@@ -33,6 +44,8 @@ namespace azloot.core
     {
         public Guid id { get; set; }
         public string name { get; set; }
+        public string rolename { get; set; }
+        public string classname { get; set; }
         public Guid rankid { get; set; }
     }
 }
