@@ -25,7 +25,17 @@ namespace azloot.core
             };
         }
 
+        #region constructors
         public Person() { }
+
+        public Person(string name, Rank rank, string className, string roleName)
+        {
+            this.Id = Guid.NewGuid();
+            this.Name = name;
+            this.Rank = rank;
+            this.ClassName = className;
+            this.RoleName = roleName;
+        }
 
         public Person(PersonDatapack datapack, Configuration config)
         {
@@ -35,6 +45,7 @@ namespace azloot.core
             this.RoleName = datapack.rolename;
             this.Rank = config.Ranks[datapack.rankid];
         }
+        #endregion
     }
 
     /// <summary>

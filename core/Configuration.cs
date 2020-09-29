@@ -14,6 +14,7 @@ namespace azloot.core
         public readonly RankSet Ranks = new RankSet();
         public readonly LootHistory LootHistory = new LootHistory();
         public readonly PointsHistory PointsHistory = new PointsHistory();
+        public readonly AdminHistory AdminHistory = new AdminHistory();
         public readonly ItemSet Items = new ItemSet();
 
         public ConfigurationDatapack ToDatapack()
@@ -25,7 +26,8 @@ namespace azloot.core
                 persons = this.Persons.ToDatapack(),
                 ranks = this.Ranks.ToDatapack(),
                 loothistory = this.LootHistory.ToDatapack(),
-                pointshistory = this.PointsHistory.ToDatapack()
+                pointshistory = this.PointsHistory.ToDatapack(),
+                adminhistory = this.AdminHistory.ToDatapack()
             };
         }
 
@@ -42,6 +44,7 @@ namespace azloot.core
         {
             this.Items = new ItemSet(datapack.items);
             this.Ranks = new RankSet(datapack.ranks);
+            this.AdminHistory = new AdminHistory(datapack.adminhistory);
             this.Persons = new PersonSet(datapack.persons, this);
             this.PointsLists = new PointsListSet(datapack.pointslists, this);
             this.PointsHistory = new PointsHistory(datapack.pointshistory, this);
@@ -56,6 +59,7 @@ namespace azloot.core
         public RankSetDatapack ranks { get; set; }
         public LootHistoryDatapack loothistory { get; set; }
         public PointsHistoryDatapack pointshistory { get; set; }
+        public AdminHistoryDatapack adminhistory { get; set; }
         public ItemSetDatapack items { get; set; }
     }
 }

@@ -7,11 +7,12 @@ namespace azloot.core
     /// This is the custom part. The loot engine should work with the data structure available to maintain points,
     /// and to distribute loot from a pool.
     /// </summary>
-    public abstract class LootEngine
+    public class LootEngine
     {
         private readonly Configuration config;
         private LootPool activePool;
 
+        #region constructors
         public LootEngine()
         {
             this.config = new Configuration();
@@ -26,6 +27,13 @@ namespace azloot.core
         {
             this.config = new Configuration(datapack);
         }
+        #endregion
+
+        public void AddPerson(string name, Rank rank, string className, string roleName)
+        {
+            var newPerson = new Person(name, rank, className, roleName);
+        }
+
 
 
         public void AddPoints(PointsList pointsList, List<Person> persons, float addValue, string reason)
