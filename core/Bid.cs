@@ -6,9 +6,19 @@
     /// </summary>
     public class Bid
     {
+        public Bid() { }
+
+        public Bid(Person person, Item item, PointsList pointsList, int personalPriority)
+        {
+            this.Person = person;
+            this.Item = item;
+            this.PointsList = PointsList;
+            this.PersonalPriority = personalPriority;
+        }
+
         public Person Person { get; set; }
         public Item Item { get; set; }
-        public PointsList PrioList { get; set; }
+        public PointsList PointsList { get; set; }
         public int PersonalPriority { get; set; }
     }
 }

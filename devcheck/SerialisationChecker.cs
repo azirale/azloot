@@ -99,6 +99,11 @@ namespace azloot.devcheck
             };
             config.LootHistory.Add(loot1);
             config.LootHistory.Add(loot2);
+            // admin history
+            var adminEntry1 = new AdminEvent("NONSENSE","Did flub");
+            var adminEntry2 = new AdminEvent("NONSENSE","Did wub");
+            config.AdminHistory.Add(adminEntry1);
+            config.AdminHistory.Add(adminEntry2);
             // done -- we can give it back
             return config;
         }

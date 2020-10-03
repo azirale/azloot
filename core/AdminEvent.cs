@@ -5,23 +5,26 @@ namespace azloot.core
     public class AdminEvent
     {
         public Guid Id { get; set; }
-        public string Action { get; set; }
+        public string ActionCode { get; set; }
+        public string ActionDescription { get; set; }
         public long Timestamp { get; set; }
 
         #region constructors
         public AdminEvent() { }
 
-        public AdminEvent(string action)
+        public AdminEvent(string actionCode, string actionDescription)
         {
             this.Id = Guid.NewGuid();
-            this.Action = action;
+            this.ActionCode = ActionCode;
+            this.ActionDescription = actionDescription;
             this.Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         }
 
         public AdminEvent(AdminEventDatapack datapack)
         {
             this.Id = datapack.id;
-            this.Action = datapack.action;
+            this.ActionCode = datapack.actioncode;
+            this.ActionDescription = datapack.actiondescription;
             this.Timestamp = datapack.timestamp;
         }
         #endregion
@@ -31,7 +34,8 @@ namespace azloot.core
             return new AdminEventDatapack()
             {
                 id = this.Id,
-                action = this.Action,
+                actioncode = this.ActionCode,
+                actiondescription = this.ActionDescription,
                 timestamp = this.Timestamp
             };
         }
@@ -40,7 +44,8 @@ namespace azloot.core
     public class AdminEventDatapack
     {
         public Guid id { get; set; }
-        public string action { get; set; }
+        public string actioncode { get; set; }
+        public string actiondescription { get; set; }
         public long timestamp { get; set; }
     }
 }

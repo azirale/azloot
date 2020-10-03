@@ -13,6 +13,12 @@ namespace azloot.core
 
         public Item() { this.Id = 0; }
 
+        public Item(int itemId)
+        {
+            this.Id = itemId;
+            this.Name = "UNKNOWN";
+        }
+
         public Item(int id, string Name)
         {
             this.Id = id;
