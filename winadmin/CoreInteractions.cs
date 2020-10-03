@@ -40,7 +40,9 @@ namespace winadmin
             using (var streamRead = new StreamReader(fileRead))
             {
                 var jsonText = streamRead.ReadToEnd();
-                JsonSerializer.Deserialize(jsonText, typeof(ConfigurationDatapack));
+                var datapack =  JsonSerializer.Deserialize<ConfigurationDatapack>(jsonText);
+                config = new Configuration(datapack);
+                config = null;
             }
         }
 
