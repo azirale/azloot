@@ -8,7 +8,7 @@ namespace azloot.core
     /// </summary>
     public class Configuration
     {
-
+        public string Name { get; set; }
         public readonly PointsListSet PointsLists = new PointsListSet();
         public readonly PersonSet Persons = new PersonSet();
         public readonly RankSet Ranks = new RankSet();
@@ -21,6 +21,7 @@ namespace azloot.core
         {
             return new ConfigurationDatapack()
             {
+                name = this.Name,
                 items = this.Items.ToDatapack(),
                 pointslists = this.PointsLists.ToDatapack(),
                 persons = this.Persons.ToDatapack(),
@@ -42,6 +43,7 @@ namespace azloot.core
         /// <param name="datapack"></param>
         public Configuration(ConfigurationDatapack datapack)
         {
+            this.Name = datapack.name;
             this.Items = new ItemSet(datapack.items);
             this.Ranks = new RankSet(datapack.ranks);
             this.AdminHistory = new AdminHistory(datapack.adminhistory);
@@ -54,6 +56,7 @@ namespace azloot.core
 
     public class ConfigurationDatapack
     {
+        public string name { get; set; }
         public PointsListSetDatapack pointslists { get; set; }
         public PersonSetDatapack persons { get; set; }
         public RankSetDatapack ranks { get; set; }
