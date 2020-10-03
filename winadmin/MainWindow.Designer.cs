@@ -77,6 +77,7 @@
             this.menuFileOpen.Name = "menuFileOpen";
             this.menuFileOpen.Size = new System.Drawing.Size(185, 22);
             this.menuFileOpen.Text = "Open";
+            this.menuFileOpen.Click += new System.EventHandler(this.menuFileOpen_Click);
             // 
             // menuFileSave
             // 
@@ -90,6 +91,7 @@
             this.menuFileSaveas.Name = "menuFileSaveas";
             this.menuFileSaveas.Size = new System.Drawing.Size(185, 22);
             this.menuFileSaveas.Text = "Save As";
+            this.menuFileSaveas.Click += new System.EventHandler(this.menuFileSaveas_Click);
             // 
             // menuSep1
             // 
