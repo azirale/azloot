@@ -40,6 +40,14 @@ namespace winadmin
             lastKnownSaveLocation = dialog.FileName;
         }
 
+        private static void DefaultSave()
+        {
+            // if we opened or saved from a location then we can re-use it
+            if (lastKnownSaveLocation != null) SaveToLocation(lastKnownSaveLocation);
+            // otherwise we need to pick it first
+            else ChooseFileLocationAndSave();
+        }
+
         private static void SaveToLocation(string filePath)
         {
             CoreInteractions.SaveConfiguration(filePath);
@@ -57,6 +65,25 @@ namespace winadmin
             if (dialog.FileName == string.Empty) return;
             CoreInteractions.OpenConfiguration(dialog.FileName);
             lastKnownSaveLocation = dialog.FileName;
+        }
+
+        private static void SaveOnExitCheck(FormClosingEventArgs e)
+        {
+            // if there is no unsaved data we are ok to close
+            if (!CoreInteractions.HasUnsavedData()) return;
+            // check with user if they want to save before closing (or cancel closing)
+            DialogResult result = MessageBox.Show("Save before exit?", "Do you want to save before exiting?", MessageBoxButtons.YesNoCancel);
+            switch (result)
+            {
+                // cancel close event
+                case DialogResult.Cancel:
+                    e.Cancel = true;
+                    return;
+                // ok means go ahead and save then let exit go ahead
+                case DialogResult.Yes:
+                    DefaultSave();
+                    return;
+            }
         }
         #endregion
 
@@ -77,10 +104,17 @@ namespace winadmin
 
         private void menuFileSave_Click(object sender, EventArgs e)
         {
-            // if we opened or saved from a location then we can re-use it
-            if (lastKnownSaveLocation != null) SaveToLocation(lastKnownSaveLocation);
-            // otherwise we need to pick it first
-            else ChooseFileLocationAndSave();
+            DefaultSave();
+        }
+
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SaveOnExitCheck(e);
+        }
+
+        private void menuFileExit_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

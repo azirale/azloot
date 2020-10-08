@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using azloot.core;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿using azloot.core;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
+using System.Text.Json;
 
 namespace winadmin
 {
@@ -16,6 +11,7 @@ namespace winadmin
         /// The active/open configuration. Defaults to 
         /// </summary>
         private static Configuration config = new Configuration();
+        private static bool isModifiedAfterSave = false;
 
         public static void CreateNewConfiguration()
         {
@@ -29,6 +25,7 @@ namespace winadmin
             config.Ranks.Add(rank);
             config.Persons.Add(person);
             config.PointsLists.Add(plist);
+            isModifiedAfterSave = true;
         }
 
         /// <summary>
@@ -44,6 +41,7 @@ namespace winadmin
                 config = new Configuration(datapack);
                 config = null;
             }
+            isModifiedAfterSave = false;
         }
 
         /// <summary>
@@ -60,6 +58,12 @@ namespace winadmin
             {
                 streamWrite.Write(jsonText);
             }
+            isModifiedAfterSave = false;
+        }
+
+        public static bool HasUnsavedData()
+        {
+            return isModifiedAfterSave;
         }
     }
 }
